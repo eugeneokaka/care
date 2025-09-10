@@ -1,0 +1,151 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  clerkId       String   @unique
+  email         String   @unique
+  firstName     String?
+  lastName      String?
+  phone         String?
+  role          Role     @default(PATIENT) // e.g. ADMIN, DOCTOR, PATIENT
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Patient-specific fields
+  dateOfBirth    DateTime?
+  gender         String?
+  address        String?
+  emergencyPhone String?
+  onboarded      Boolean  @default(false)
+
+  // Relations
+  staff          Staff?
+  visits         Visit[]
+  transactions   Transaction[]
+  healthRecords  HealthRecord[]
+  medications    Medication[]
+  allergies      Allergy[]
+  medicalHistory MedicalHistory[]
+}
+
+model Staff {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  title      String?
+  department String?
+  salary     Float?
+  role       String?
+
+  // Relations
+  visits     Visit[]  @relation("StaffVisits")
+}
+
+model Visit {
+  id              String   @id @default(uuid())
+  userId          String   // Patient
+  staffId         String?  // Doctor/Nurse who handled the visit
+  date            DateTime @default(now())
+
+  // Core visit details
+  symptoms        String?
+  diagnosis       String?
+  notes           String?
+
+  // Vitals
+  temperature     Float?
+  weight          Float?
+  height          Float?
+  bloodPressure   String?  // e.g. "120/80"
+  heartRate       Int?
+  respirationRate Int?
+  oxygenSaturation Int?
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  staff  Staff? @relation("StaffVisits", fields: [staffId], references: [id])
+}
+
+model HealthRecord {
+  id          String   @id @default(uuid())
+  userId      String
+  recordType  String
+  description String?
+  date        DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Medication {
+  id           String   @id @default(uuid())
+  userId       String
+  name         String
+  dosage       String?
+  frequency    String?
+  startDate    DateTime?
+  endDate      DateTime?
+  prescribedBy String?
+
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model Allergy {
+  id        String   @id @default(uuid())
+  userId    String
+  substance String
+  reaction  String?
+  severity  String?
+
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model MedicalHistory {
+  id          String   @id @default(uuid())
+  userId      String
+  condition   String
+  notes       String?
+  diagnosedAt DateTime?
+
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Transaction {
+  id          String         @id @default(uuid())
+  amount      Float
+  type        TransactionType
+  description String?
+  date        DateTime       @default(now())
+
+  // Relations
+  createdById String?
+  createdBy   User?          @relation(fields: [createdById], references: [id])
+}
+
+enum Role {
+  ADMIN
+  DOCTOR
+  NURSE
+  RECEPTIONIST
+  ACCOUNTANT
+  LAB_TECH
+  PHARMACIST
+  PATIENT
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
