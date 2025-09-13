@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 
 type MedicalHistory = {
   id: string;
@@ -19,9 +19,21 @@ type Allergy = {
   severity?: string;
 };
 
+type Visit = {
+  id: string;
+  date: string;
+  symptoms?: string;
+  diagnosis?: string;
+  notes?: string;
+  staff?: { user?: { firstName?: string; lastName?: string } };
+  medications?: { name: string; dosage?: string; frequency?: string }[];
+};
+
 export default function DashboardPage() {
   const [medicalHistory, setMedicalHistory] = useState<MedicalHistory[]>([]);
   const [allergies, setAllergies] = useState<Allergy[]>([]);
+  const [visits, setVisits] = useState<Visit[]>([]);
+
   const [historyForm, setHistoryForm] = useState({ condition: "", notes: "" });
   const [allergyForm, setAllergyForm] = useState({
     substance: "",
@@ -29,36 +41,64 @@ export default function DashboardPage() {
     severity: "",
   });
 
-  useEffect(() => {
-    fetch("/api/medical-history")
-      .then((res) => res.json())
-      .then((data: MedicalHistory[]) => setMedicalHistory(data));
+  const router = useRouter();
 
-    fetch("/api/allergies")
-      .then((res) => res.json())
-      .then((data: Allergy[]) => setAllergies(data));
-  }, []);
+  useEffect(() => {
+    async function fetchDashboardData() {
+      const res = await fetch("/api/check-onboarding");
+      const data = await res.json();
+
+      if (!data.onboarded) {
+        router.push("/onboarding");
+        return;
+      }
+
+      // Fetch medical history
+      const historyRes = await fetch("/api/medical-history");
+      setMedicalHistory(await historyRes.json());
+
+      // Fetch allergies
+      const allergyRes = await fetch("/api/allergies");
+      setAllergies(await allergyRes.json());
+
+      // Fetch visits
+      const visitsRes = await fetch("/api/visits/getvisit");
+      setVisits(await visitsRes.json());
+    }
+
+    fetchDashboardData();
+  }, [router]);
 
   async function addMedicalHistory() {
+    if (!historyForm.condition.trim()) return;
+
     const res = await fetch("/api/medical-history", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(historyForm),
     });
-    const data: MedicalHistory = await res.json();
-    setMedicalHistory([...medicalHistory, data]);
-    setHistoryForm({ condition: "", notes: "" });
+
+    if (res.ok) {
+      const data: MedicalHistory = await res.json();
+      setMedicalHistory([...medicalHistory, data]);
+      setHistoryForm({ condition: "", notes: "" });
+    }
   }
 
   async function addAllergy() {
+    if (!allergyForm.substance.trim()) return;
+
     const res = await fetch("/api/allergies", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(allergyForm),
     });
-    const data: Allergy = await res.json();
-    setAllergies([...allergies, data]);
-    setAllergyForm({ substance: "", reaction: "", severity: "" });
+
+    if (res.ok) {
+      const data: Allergy = await res.json();
+      setAllergies([...allergies, data]);
+      setAllergyForm({ substance: "", reaction: "", severity: "" });
+    }
   }
 
   return (
@@ -107,7 +147,7 @@ export default function DashboardPage() {
       </section>
 
       {/* Allergies */}
-      <section>
+      <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">Allergies</h2>
         <div className="flex flex-col md:flex-row gap-4 mb-4">
           <Input
@@ -148,6 +188,42 @@ export default function DashboardPage() {
               )}
               {a.severity && (
                 <p className="text-gray-700 mt-1">Severity: {a.severity}</p>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Visits */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">Visits</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {visits.map((v) => (
+            <div
+              key={v.id}
+              className="border rounded-xl p-4 shadow-sm bg-green-50"
+            >
+              <p className="font-semibold">
+                Staff: {v.staff?.user?.firstName} {v.staff?.user?.lastName}
+              </p>
+              <p className="text-gray-700 mt-1">
+                Date: {new Date(v.date).toLocaleString()}
+              </p>
+              {v.symptoms && <p>Symptoms: {v.symptoms}</p>}
+              {v.diagnosis && <p>Diagnosis: {v.diagnosis}</p>}
+              {v.notes && <p>Notes: {v.notes}</p>}
+              {(v.medications ?? []).length > 0 && (
+                <div className="mt-2">
+                  <p className="font-semibold">Medications:</p>
+                  <ul className="list-disc list-inside">
+                    {(v.medications ?? []).map((m, i) => (
+                      <li key={i}>
+                        {m.name} {m.dosage && `- ${m.dosage}`}{" "}
+                        {m.frequency && `(${m.frequency})`}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </div>
           ))}
