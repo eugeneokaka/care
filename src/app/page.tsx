@@ -73,6 +73,13 @@ export default function HomePage() {
                   Schedule visits with doctors and manage your health seamlessly
                   online.
                 </p>
+                <div>
+                  <Link href="/booking" className="mt-4 inline-block">
+                    <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-2xl shadow-md">
+                      Book Now
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
 

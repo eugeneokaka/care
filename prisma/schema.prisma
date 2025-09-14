@@ -35,6 +35,7 @@ model User {
   medications      Medication[]
   allergies        Allergy[]
   medicalHistory   MedicalHistory[]
+  bookings         Booking[] @relation("UserBookings")
 }
 
 model Staff {
@@ -50,6 +51,36 @@ model Staff {
 
   // Relations
   visits      Visit[]  @relation("StaffVisits")
+}
+model Booking {
+  id             String         @id @default(uuid())
+  userId         String
+  scheduledDate  DateTime       // 📅 Only the date part is used for grouping
+  timeSlot       TimeSlot       // ⏰ Specific time slot in the day
+  status         BookingStatus  @default(PENDING)
+  reason          String?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  user            User           @relation("UserBookings", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([scheduledDate, timeSlot]) // ⚡ ensures only 1 user can book a slot
+}
+
+enum TimeSlot {
+  SLOT_09_10
+  SLOT_10_11
+  SLOT_11_12
+  SLOT_12_13
+  SLOT_14_15
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
 }
 
 model Visit {
