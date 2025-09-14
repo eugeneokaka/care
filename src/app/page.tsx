@@ -20,7 +20,7 @@ export default function HomePage() {
               connect with doctors — all in one place.
             </p>
             <div className="flex gap-4">
-              <Link href="/sign-up">
+              <Link href="/sign-in">
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl shadow-md">
                   Get Started
                 </Button>
@@ -95,7 +95,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-12">
-            <Link href="/sign-up">
+            <Link href="/sign-in">
               <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl shadow-md flex items-center gap-2">
                 Get Started Today <ArrowRight className="w-4 h-4" />
               </Button>
