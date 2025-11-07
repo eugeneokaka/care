@@ -33,6 +33,7 @@ export default function DashboardPage() {
   const [medicalHistory, setMedicalHistory] = useState<MedicalHistory[]>([]);
   const [allergies, setAllergies] = useState<Allergy[]>([]);
   const [visits, setVisits] = useState<Visit[]>([]);
+  const [role, setRole] = useState<string | null>(null);
 
   const [historyForm, setHistoryForm] = useState({ condition: "", notes: "" });
   const [allergyForm, setAllergyForm] = useState({
@@ -45,6 +46,12 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function fetchDashboardData() {
+      // ✅ 1. Get user role
+      const roleRes = await fetch("/api/auth/role");
+      const roleData = await roleRes.json();
+      setRole(roleData.role);
+
+      // ✅ 2. Onboarding check
       const res = await fetch("/api/check-onboarding");
       const data = await res.json();
 
@@ -53,15 +60,15 @@ export default function DashboardPage() {
         return;
       }
 
-      // Fetch medical history
+      // ✅ 3. Fetch medical history
       const historyRes = await fetch("/api/medical-history");
       setMedicalHistory(await historyRes.json());
 
-      // Fetch allergies
+      // ✅ 4. Fetch allergies
       const allergyRes = await fetch("/api/allergies");
       setAllergies(await allergyRes.json());
 
-      // Fetch visits
+      // ✅ 5. Fetch visits
       const visitsRes = await fetch("/api/visits/getvisit");
       setVisits(await visitsRes.json());
     }
@@ -103,9 +110,54 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-white p-8">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
 
-      {/* Medical History */}
+        {/* ✅ ROLE-BASED ACTION BUTTONS */}
+        <div className="flex gap-3">
+          {/* ✅ Show Visits for all NON-PATIENT users */}
+          {role && role !== "PATIENT" && (
+            <Button
+              className="bg-blue-600 text-white"
+              onClick={() => router.push("/dashboard/visit")}
+            >
+              Visits
+            </Button>
+          )}
+
+          {/* ✅ Show Records for all NON-PATIENT users */}
+          {role && role !== "PATIENT" && (
+            <Button
+              className="bg-blue-600 text-white"
+              onClick={() => router.push("/records")}
+            >
+              Records
+            </Button>
+          )}
+
+          {/* ✅ Show button for bookings */}
+          {role && role !== "PATIENT" && (
+            <Button
+              className="bg-blue-600 text-white"
+              onClick={() => router.push("/dashboard/bookings")}
+            >
+              bookings
+            </Button>
+          )}
+
+          {/* ✅ Show Staff Dashboard ONLY for ADMIN */}
+          {role === "ADMIN" && (
+            <Button
+              className="bg-black text-white"
+              onClick={() => router.push("/dashboard/staff")}
+            >
+              Staff Dashboard
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* ✅ Medical History */}
       <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">Medical History</h2>
         <div className="flex flex-col md:flex-row gap-4 mb-4">
@@ -146,7 +198,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* Allergies */}
+      {/* ✅ Allergies */}
       <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">Allergies</h2>
         <div className="flex flex-col md:flex-row gap-4 mb-4">
@@ -194,7 +246,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* Visits */}
+      {/* ✅ Visits */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Visits</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -218,8 +270,8 @@ export default function DashboardPage() {
                   <ul className="list-disc list-inside">
                     {(v.medications ?? []).map((m, i) => (
                       <li key={i}>
-                        {m.name} {m.dosage && `- ${m.dosage}`}{" "}
-                        {m.frequency && `(${m.frequency})`}
+                        {m.name} {m.dosage && `- ${m.dosage}`}
+                        {m.frequency && ` (${m.frequency})`}
                       </li>
                     ))}
                   </ul>
