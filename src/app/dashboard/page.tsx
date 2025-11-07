@@ -109,13 +109,13 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white p-8">
-      <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen bg-white p-4 md:p-8">
+      {/* ✅ Responsive Header Area */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <h1 className="text-3xl font-bold">Dashboard</h1>
 
-        {/* ✅ ROLE-BASED ACTION BUTTONS */}
-        <div className="flex gap-3">
-          {/* ✅ Show Visits for all NON-PATIENT users */}
+        {/* ✅ ROLE-BASED ACTION BUTTONS (WRAP ON MOBILE) */}
+        <div className="flex flex-wrap gap-3 justify-start md:justify-end max-w-full">
           {role && role !== "PATIENT" && (
             <Button
               className="bg-blue-600 text-white"
@@ -125,7 +125,6 @@ export default function DashboardPage() {
             </Button>
           )}
 
-          {/* ✅ Show Records for all NON-PATIENT users */}
           {role && role !== "PATIENT" && (
             <Button
               className="bg-blue-600 text-white"
@@ -135,17 +134,15 @@ export default function DashboardPage() {
             </Button>
           )}
 
-          {/* ✅ Show button for bookings */}
           {role && role !== "PATIENT" && (
             <Button
               className="bg-blue-600 text-white"
               onClick={() => router.push("/dashboard/bookings")}
             >
-              bookings
+              Bookings
             </Button>
           )}
 
-          {/* ✅ Show Staff Dashboard ONLY for ADMIN */}
           {role === "ADMIN" && (
             <Button
               className="bg-black text-white"
@@ -157,7 +154,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ✅ Medical History */}
+      {/* ✅ Medical History Section */}
       <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">Medical History</h2>
         <div className="flex flex-col md:flex-row gap-4 mb-4">
@@ -198,7 +195,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* ✅ Allergies */}
+      {/* ✅ Allergies Section */}
       <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">Allergies</h2>
         <div className="flex flex-col md:flex-row gap-4 mb-4">
@@ -246,7 +243,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* ✅ Visits */}
+      {/* ✅ Visits Section */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Visits</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
