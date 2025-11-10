@@ -14,30 +14,46 @@ export default function Navbar() {
             Care<span className="text-blue-600">.</span>
           </Link>
 
-          {/* Right side */}
-          <div className="flex items-center space-x-4">
-            {/* Dashboard Button for signed-in users */}
-            <SignedIn>
-              <Link href="/dashboard">
-                <Button className="bg-blue-600 text-white hover:bg-blue-700 rounded-2xl px-4 py-2 shadow">
-                  Dashboard
-                </Button>
+          {/* Navigation & Buttons */}
+          <div className="flex items-center space-x-6">
+            {/* Navigation Links */}
+            <div className="hidden md:flex space-x-4">
+              <Link
+                href="/about"
+                className="text-gray-700 hover:text-blue-600 font-medium"
+              >
+                About
               </Link>
-            </SignedIn>
+              <Link
+                href="/contact"
+                className="text-gray-700 hover:text-blue-600 font-medium"
+              >
+                Contact
+              </Link>
+            </div>
 
-            {/* Profile button for signed-in users */}
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
+            {/* Right side buttons */}
+            <div className="flex items-center space-x-4">
+              <SignedIn>
+                <Link href="/dashboard">
+                  <Button className="bg-blue-600 text-white hover:bg-blue-700 rounded-2xl px-4 py-2 shadow">
+                    Dashboard
+                  </Button>
+                </Link>
+              </SignedIn>
 
-            {/* Sign in button for signed-out users */}
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button className="bg-blue-600 text-white hover:bg-blue-700 rounded-2xl px-4 py-2 shadow">
-                  Sign In
-                </Button>
-              </SignInButton>
-            </SignedOut>
+              <SignedIn>
+                <UserButton afterSignOutUrl="/" />
+              </SignedIn>
+
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <Button className="bg-blue-600 text-white hover:bg-blue-700 rounded-2xl px-4 py-2 shadow">
+                    Sign In
+                  </Button>
+                </SignInButton>
+              </SignedOut>
+            </div>
           </div>
         </div>
       </div>
