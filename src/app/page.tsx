@@ -200,17 +200,9 @@ export default function HomePage() {
             <Link href="/about" className="text-gray-600 hover:text-blue-600">
               About
             </Link>
-            <Link
-              href="/services"
-              className="text-gray-600 hover:text-blue-600"
-            >
-              Services
-            </Link>
+
             <Link href="/contact" className="text-gray-600 hover:text-blue-600">
               Contact
-            </Link>
-            <Link href="/privacy" className="text-gray-600 hover:text-blue-600">
-              Privacy Policy
             </Link>
           </div>
         </div>
@@ -218,3 +210,4 @@ export default function HomePage() {
     </div>
   );
 }
+/////
