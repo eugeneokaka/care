@@ -2,22 +2,29 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react"; // <-- Lucide icons
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
     <nav className="w-full bg-white border-b shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Logo / Brand */}
-          <Link href="/" className="text-2xl font-bold text-black">
-            Care<span className="text-blue-600">.</span>
+        <div className="flex justify-between h-20 items-center">
+          {/* Logo */}
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="Life Care Hospital Logo"
+              width={300} // optional, adjusts width proportionally
+              height={300} // optional, adjusts height proportionally
+              className="h-20 w-auto object-contain" // h-12 fits navbar nicely
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}

@@ -38,7 +38,7 @@ export default function AboutPage() {
               We combine advanced technology with compassionate care, making us
               a trusted healthcare provider in the community.
             </p>
-            <Button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white">
+            <Button className="mt-6 bg-green-600 hover:bg-green-700 text-white">
               Learn More
             </Button>
           </div>
@@ -54,7 +54,7 @@ export default function AboutPage() {
 
         {/* Background Section */}
         <div className="mt-20">
-          <h2 className="text-3xl font-bold text-blue-600 mb-6">Background</h2>
+          <h2 className="text-3xl font-bold text-green-600 mb-6">Background</h2>
           <p className="text-gray-700 mb-4">
             Established in 2005, Care Hospital has grown into a full-service
             medical facility, serving thousands of patients annually. We focus
@@ -68,27 +68,27 @@ export default function AboutPage() {
 
         {/* Management Section */}
         <div className="mt-16">
-          <h2 className="text-3xl font-bold text-blue-600 mb-6">Management</h2>
+          <h2 className="text-3xl font-bold text-green-600 mb-6">Management</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardHeader>
-                <CardTitle className="text-blue-600">Dr. Jane Smith</CardTitle>
+                <CardTitle className="text-green-600">Dr. Jane Smith</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>Chief Medical Officer</CardDescription>
               </CardContent>
             </Card>
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardHeader>
-                <CardTitle className="text-blue-600">Mr. John Doe</CardTitle>
+                <CardTitle className="text-green-600">Mr. John Doe</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>Hospital Administrator</CardDescription>
               </CardContent>
             </Card>
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardHeader>
-                <CardTitle className="text-blue-600">
+                <CardTitle className="text-green-600">
                   Mrs. Mary Johnson
                 </CardTitle>
               </CardHeader>
@@ -100,54 +100,54 @@ export default function AboutPage() {
         </div>
 
         {/* Hospital Departments Section */}
-        <div className="mt-16">
-          <h2 className="text-3xl font-bold text-blue-600 mb-6">
+        <div className="mt-16 bg-green-50 p-8 rounded-xl">
+          <h2 className="text-3xl font-bold text-green-600 mb-6">
             Hospital Departments
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardContent>
-                <CardTitle className="text-blue-600">Emergency</CardTitle>
+                <CardTitle className="text-green-600">Emergency</CardTitle>
                 <CardDescription>
                   24/7 emergency care for urgent medical needs.
                 </CardDescription>
               </CardContent>
             </Card>
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardContent>
-                <CardTitle className="text-blue-600">Cardiology</CardTitle>
+                <CardTitle className="text-green-600">Cardiology</CardTitle>
                 <CardDescription>
                   Specialized care for heart-related conditions.
                 </CardDescription>
               </CardContent>
             </Card>
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardContent>
-                <CardTitle className="text-blue-600">Pediatrics</CardTitle>
+                <CardTitle className="text-green-600">Pediatrics</CardTitle>
                 <CardDescription>
                   Comprehensive care for children and adolescents.
                 </CardDescription>
               </CardContent>
             </Card>
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardContent>
-                <CardTitle className="text-blue-600">Radiology</CardTitle>
+                <CardTitle className="text-green-600">Radiology</CardTitle>
                 <CardDescription>
                   Advanced imaging and diagnostic services.
                 </CardDescription>
               </CardContent>
             </Card>
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardContent>
-                <CardTitle className="text-blue-600">Surgery</CardTitle>
+                <CardTitle className="text-green-600">Surgery</CardTitle>
                 <CardDescription>
                   Expert surgical services with modern facilities.
                 </CardDescription>
               </CardContent>
             </Card>
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardContent>
-                <CardTitle className="text-blue-600">Pharmacy</CardTitle>
+                <CardTitle className="text-green-600">Pharmacy</CardTitle>
                 <CardDescription>
                   Well-stocked pharmacy for all prescription needs.
                 </CardDescription>
@@ -158,9 +158,9 @@ export default function AboutPage() {
 
         {/* Mission & Vision */}
         <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <Card className="border-blue-100">
+          <Card className="border-green-100">
             <CardHeader>
-              <CardTitle className="text-blue-600">Our Mission</CardTitle>
+              <CardTitle className="text-green-600">Our Mission</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription>
@@ -171,9 +171,9 @@ export default function AboutPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-blue-100">
+          <Card className="border-green-100">
             <CardHeader>
-              <CardTitle className="text-blue-600">Our Vision</CardTitle>
+              <CardTitle className="text-green-600">Our Vision</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription>
@@ -186,29 +186,29 @@ export default function AboutPage() {
 
         {/* Core Values */}
         <div className="mt-20 text-center">
-          <h2 className="text-3xl font-bold text-blue-600 mb-8">
+          <h2 className="text-3xl font-bold text-green-600 mb-8">
             Our Core Values
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardContent>
-                <CardTitle className="text-blue-600">Compassion</CardTitle>
+                <CardTitle className="text-green-600">Compassion</CardTitle>
                 <CardDescription>
                   We treat every patient with care and empathy.
                 </CardDescription>
               </CardContent>
             </Card>
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardContent>
-                <CardTitle className="text-blue-600">Integrity</CardTitle>
+                <CardTitle className="text-green-600">Integrity</CardTitle>
                 <CardDescription>
                   We uphold honesty and ethical standards in all our services.
                 </CardDescription>
               </CardContent>
             </Card>
-            <Card className="border-blue-100">
+            <Card className="border-green-100">
               <CardContent>
-                <CardTitle className="text-blue-600">Excellence</CardTitle>
+                <CardTitle className="text-green-600">Excellence</CardTitle>
                 <CardDescription>
                   We strive for the highest quality in medical care and patient
                   experience.

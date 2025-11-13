@@ -12,7 +12,8 @@ export default function HomePage() {
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between px-6">
           <div className="max-w-xl">
             <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
-              Welcome to <span className="text-blue-600">Care</span>
+              Welcome to <br />
+              <span className="text-blue-600">Life Care Hospital</span>
             </h1>
             <p className="text-lg text-gray-600 mb-6">
               Your health, simplified. Book appointments, track records, and
@@ -138,6 +139,72 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* New Departments / Gallery Section */}
+      <section className="py-20 bg-green-50">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-12">
+            Explore Our <span className="text-green-600">Departments</span>
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="shadow-lg rounded-2xl p-4">
+              <Image
+                src="https://images.unsplash.com/photo-1628348070889-cb656235b4eb?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="Cardiology"
+                width={400}
+                height={250}
+                className="rounded-xl mb-4 object-cover"
+                unoptimized
+              />
+              <h3 className="text-xl font-semibold mb-2">Cardiology</h3>
+              <p className="text-gray-600">
+                Advanced heart care and treatment by experienced cardiologists.
+              </p>
+            </Card>
+
+            <Card className="shadow-lg rounded-2xl p-4">
+              <Image
+                src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=838&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="Pediatrics"
+                width={400}
+                height={250}
+                className="rounded-xl mb-4 object-cover"
+                unoptimized
+              />
+              <h3 className="text-xl font-semibold mb-2">Pediatrics</h3>
+              <p className="text-gray-600">
+                Specialized care for children to ensure healthy growth and
+                development.
+              </p>
+            </Card>
+
+            <Card className="shadow-lg rounded-2xl p-4">
+              <Image
+                src="https://images.unsplash.com/photo-1631563019676-dade0dbdb8fc?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="Neurology"
+                width={400}
+                height={250}
+                className="rounded-xl mb-4 object-cover"
+                unoptimized
+              />
+              <h3 className="text-xl font-semibold mb-2">Neurology</h3>
+              <p className="text-gray-600">
+                Comprehensive neurological services for brain and nervous system
+                health.
+              </p>
+            </Card>
+          </div>
+
+          <div className="mt-12">
+            <Link href="/departments">
+              <Button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-2xl shadow-md flex items-center gap-2">
+                Explore All Departments <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6 text-center">
@@ -192,7 +259,7 @@ export default function HomePage() {
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
           <div className="text-gray-700 mb-6 md:mb-0">
             <h4 className="font-bold text-lg">Care Hospital</h4>
-            <p>123 Health St, Nairobi, Kenya</p>
+            <p>LIFE CARE HOSPITAL, Kenya</p>
             <p>Phone: +254 712 345 678</p>
             <p>Email: info@carehospital.com</p>
           </div>
@@ -200,7 +267,6 @@ export default function HomePage() {
             <Link href="/about" className="text-gray-600 hover:text-blue-600">
               About
             </Link>
-
             <Link href="/contact" className="text-gray-600 hover:text-blue-600">
               Contact
             </Link>
@@ -210,4 +276,3 @@ export default function HomePage() {
     </div>
   );
 }
-/////

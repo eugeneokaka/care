@@ -12,7 +12,7 @@ export default function ContactPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-blue-600 sm:text-5xl">
-            Contact Care Hospital
+            Contact LIFE CARE HOSPITAL
           </h1>
           <p className="mt-4 text-lg text-gray-600">
             We are here to assist you. Reach out to us anytime.
