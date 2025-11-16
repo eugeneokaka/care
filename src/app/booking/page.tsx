@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils"; // make sure you have this util (Tailwind helper)
+import { cn } from "@/lib/utils";
 
 type TimeSlot =
   | "SLOT_09_10"
@@ -38,6 +38,9 @@ export default function BookingPage() {
   const [myBookings, setMyBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const [loadingBookings, setLoadingBookings] = useState(true);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
+
   const timeSlots: TimeSlot[] = [
     "SLOT_09_10",
     "SLOT_10_11",
@@ -46,6 +49,7 @@ export default function BookingPage() {
     "SLOT_14_15",
   ];
 
+  // Load booked slots for selected date
   useEffect(() => {
     if (!date) return;
     (async () => {
@@ -60,19 +64,26 @@ export default function BookingPage() {
     })();
   }, [date]);
 
+  // Load user bookings
+  async function loadMyBookings() {
+    try {
+      setLoadingBookings(true);
+      const res = await fetch(`/api/bookings/me`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setMyBookings(data.bookings || []);
+    } catch {
+      toast.error("Failed to load your bookings");
+    } finally {
+      setLoadingBookings(false);
+    }
+  }
+
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`/api/bookings/me`);
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        setMyBookings(data.bookings || []);
-      } catch {
-        toast.error("Failed to load your bookings");
-      }
-    })();
+    loadMyBookings();
   }, []);
 
+  // Create booking
   async function handleSubmit() {
     if (!date || !slot) {
       toast.error("Please select a date and time slot");
@@ -93,28 +104,43 @@ export default function BookingPage() {
         toast.success("Booking created successfully!");
         setSlot("");
 
+        // Refresh lists
         const refreshed = await fetch(`/api/bookings?date=${date}`);
-        const refreshedData = await refreshed.json();
-        setBookedSlots(refreshedData.bookedSlots || []);
+        setBookedSlots((await refreshed.json()).bookedSlots || []);
 
-        const mine = await fetch(`/api/bookings/me`);
-        const mineData = await mine.json();
-        setMyBookings(mineData.bookings || []);
+        loadMyBookings();
       } else {
-        if (data.message === "Maximum bookings reached for this day") {
-          toast.error("All 5 slots are already booked for this day.");
-        } else if (data.message === "This timeslot is already booked") {
-          toast.error("That timeslot has already been taken. Choose another.");
-        } else if (data.message === "Unauthorized") {
-          toast.error("You must be signed in to book.");
-        } else {
-          toast.error(data.message || "Booking failed");
-        }
+        toast.error(data.message || "Booking failed");
       }
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Cancel booking
+  async function cancelBooking(bookingId: string) {
+    try {
+      setCancellingId(bookingId);
+      const res = await fetch("/api/bookings/me", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookingId, status: "CANCELLED" }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success("Booking cancelled.");
+        loadMyBookings();
+      } else {
+        toast.error(data.message || "Failed to cancel booking");
+      }
+    } catch {
+      toast.error("Something went wrong cancelling your booking.");
+    } finally {
+      setCancellingId(null);
     }
   }
 
@@ -144,6 +170,7 @@ export default function BookingPage() {
               onChange={(e) => setDate(e.target.value)}
             />
           </div>
+
           <div className="space-y-1">
             <Label>Time Slot</Label>
             <Select value={slot} onValueChange={(v) => setSlot(v as TimeSlot)}>
@@ -163,6 +190,7 @@ export default function BookingPage() {
               </SelectContent>
             </Select>
           </div>
+
           <Button onClick={handleSubmit} className="w-full" disabled={loading}>
             {loading ? "Booking..." : "Book Appointment"}
           </Button>
@@ -174,7 +202,13 @@ export default function BookingPage() {
         <h2 className="text-lg font-semibold mb-3 border-b pb-1">
           My Bookings
         </h2>
-        {myBookings.length === 0 ? (
+
+        {/* Loading spinner */}
+        {loadingBookings ? (
+          <p className="text-sm text-muted-foreground animate-pulse">
+            Loading your bookings...
+          </p>
+        ) : myBookings.length === 0 ? (
           <p className="text-sm text-muted-foreground">
             You have no bookings yet.
           </p>
@@ -198,7 +232,22 @@ export default function BookingPage() {
                           .replace("_", "-")}
                       </div>
                     </div>
-                    <span className={statusColor(b.status)}>{b.status}</span>
+
+                    <div className="flex items-center gap-2">
+                      <span className={statusColor(b.status)}>{b.status}</span>
+
+                      {/* Cancel button only for PENDING */}
+                      {b.status === "PENDING" && (
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          disabled={cancellingId === b.id}
+                          onClick={() => cancelBooking(b.id)}
+                        >
+                          {cancellingId === b.id ? "Cancelling..." : "Cancel"}
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
